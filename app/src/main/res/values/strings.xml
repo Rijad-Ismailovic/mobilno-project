@@ -1,4 +1,22 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">Project</string>
     <string name="sport_field">Sport Field</string>
 </resources>
+=======
+    <string name="app_name">Sport Field Reservation App</string>
+
+    <string name="iusballon_title">Fudbalski Teren IUS Balon</string>
+    <string name="iusballon_sport">Football</string>
+    <string name="iusballon_city">Sarajevo</string>
+    <string name="iusballon_price">60</string>
+    <string name="iusballon_time">90</string>
+
+    <string name="bentbasa_title">Bentbasa Fudbalski Teren</string>
+    <string name="bentbasa_sport">Football</string>
+    <string name="bentbasa_city">Sarajevo</string>
+    <string name="bentbasa_price">50</string>
+    <string name="bentbasa_time">90</string>
+
+</resources>
+>>>>>>> c8dc7df02eb260a30535c7b74ae5b22b15bf7a9f

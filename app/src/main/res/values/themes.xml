@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+<<<<<<< HEAD
     <style name="Theme.Project" parent="android:Theme.Material.Light.NoActionBar" />
+=======
+    <style name="Theme.SportFieldReservationApp" parent="android:Theme.Material.Light.NoActionBar" />
+>>>>>>> c8dc7df02eb260a30535c7b74ae5b22b15bf7a9f
 </resources>
