@@ -1,4 +1,4 @@
-package com.example.sportfieldreservationapp.ui.theme.screens
+package com.example.sportfieldreservationapp.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

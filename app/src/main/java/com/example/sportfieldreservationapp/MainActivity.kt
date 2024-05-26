@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sportfieldreservationapp.ui.theme.SportFieldReservationAppTheme
-import com.example.sportfieldreservationapp.ui.theme.screens.homepage
-import com.example.sportfieldreservationapp.ui.theme.screens.test
+import com.example.sportfieldreservationapp.ui.screens.homepage
+import com.example.sportfieldreservationapp.ui.screens.test
 
 
 class MainActivity : ComponentActivity() {
