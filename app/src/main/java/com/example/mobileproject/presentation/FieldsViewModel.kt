@@ -15,36 +15,37 @@ import kotlinx.coroutines.launch
 
 class FieldsViewModel(
     private val dao: FieldDao
-): ViewModel() {
+) : ViewModel() {
 
     private val isSortedByDateAdded = MutableStateFlow(true)
 
-    private var fields =
+    private var notes =
         isSortedByDateAdded.flatMapLatest { sort ->
-            if(sort){
-                dao.getNotesOrderedByDateAdded()
-            } else{
-                dao.getNotesOrderedByTitle()
+            if (sort) {
+                dao.getFieldsOrderedByDateAdded()
+            } else {
+                dao.getFieldsOrderedByTitle()
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val _state = MutableStateFlow(FieldState())
     val state =
-        combine(_state, isSortedByDateAdded, fields) { state, isSortedByDateAdded, fields ->
+        combine(_state, isSortedByDateAdded, notes) { state, isSortedByDateAdded, fields ->
             state.copy(
                 fields = fields
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FieldState())
 
-    fun onEvent(event: FieldsEvent){
+    fun onEvent(event: FieldsEvent) {
         when (event) {
             is FieldsEvent.DeleteField -> {
                 viewModelScope.launch {
-                    dao.deleteField(event.field) // we need to sorround this with viewModel/coroutine scope because deleteField is a suspend function
+                    dao.deleteField(event.field)
                 }
             }
+
             is FieldsEvent.SaveField -> {
-                val field = Field(
+                val note = Field(
                     title = state.value.title.value,
                     dateAdded = System.currentTimeMillis(),
                     sport = state.value.sport.value,
@@ -54,23 +55,24 @@ class FieldsViewModel(
                 )
 
                 viewModelScope.launch {
-                    dao.upsertField(field)
+                    dao.upsertField(note)
                 }
 
-                _state.update{
+                _state.update {
                     it.copy(
                         title = mutableStateOf(""),
                         sport = mutableStateOf(""),
                         city = mutableStateOf(""),
                         price = mutableStateOf(""),
                         time = mutableStateOf("")
-
                     )
                 }
             }
+
             FieldsEvent.SortFields -> {
                 isSortedByDateAdded.value = !isSortedByDateAdded.value
             }
         }
     }
+
 }

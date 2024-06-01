@@ -35,6 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.mobileproject.presentation.uiElements.dropdownmenu
+import com.example.mobileproject.presentation.uiElements.textfield
 
 @Composable
 fun AddFieldScreen(
@@ -124,66 +126,6 @@ fun AddFieldsScreenPreview() {
     // AddFieldScreen()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun dropdownmenu(placeholderText: String, list: List<String>, fieldToUpdate: MutableState<String>) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("") }
 
-    ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = !isExpanded },
-        modifier = Modifier.width(154.dp)
-    ) {
-        TextField(
-            modifier = Modifier.menuAnchor(),
-            value = selectedItem,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
-            placeholder = { Text(text = placeholderText) }
-        )
 
-        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-            list.forEachIndexed { index, text ->
-                DropdownMenuItem(
-                    text = { Text(text = text) },
-                    onClick = {
-                        fieldToUpdate.value = list[index]
-                        selectedItem = list[index]
-                        isExpanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                )
-            }
-        }
-    }
-}
 
-@Composable
-fun textfield(
-    placeholderText: String,
-    fieldToUpdate: MutableState<String>,
-    suffix: String,
-    keyboardType: KeyboardType
-) {
-    var isError by remember { mutableStateOf(false) }
-
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        value = fieldToUpdate.value,
-        onValueChange = {
-            fieldToUpdate.value = it
-        },
-        textStyle = TextStyle(
-            fontSize = 17.sp
-        ),
-        placeholder = {
-            Text(text = placeholderText)
-        },
-        suffix = { Text(text = suffix) },
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
-    )
-}

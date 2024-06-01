@@ -16,8 +16,8 @@ interface FieldDao {
     suspend fun deleteField(field: Field)
 
     @Query("SELECT * FROM fields ORDER BY dateAdded")
-    fun getNotesOrderedByDateAdded(): Flow<List<Field>>
+    fun getFieldsOrderedByDateAdded(): Flow<List<Field>>
 
     @Query("SELECT * FROM fields ORDER BY dateAdded ASC")
-    fun getNotesOrderedByTitle(): Flow<List<Field>>
+    fun getFieldsOrderedByTitle(): Flow<List<Field>>
 }
