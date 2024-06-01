@@ -19,7 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -42,6 +45,7 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
 import com.example.mobileproject.R
 
@@ -112,56 +116,7 @@ fun HomepageScreen(
 }
 
 @Composable
-fun FieldItem(
-    state: FieldState,
-    index: Int,
-    onEvent: (FieldsEvent) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(12.dp)
-    ){
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            
-            Text(
-                text = state.fields[index].title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = state.fields[index].sport,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        }
-
-        IconButton(
-            onClick = {
-                onEvent(FieldsEvent.DeleteField(state.fields[index]))
-            }
-        ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Delete,
-                contentDescription = "Delete Note",
-                modifier = Modifier.size(35.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-    }
-}
-
-@Composable
-fun FieldCard(
+fun FieldCardOld(
     state: FieldState,
     index: Int,
     onEvent: (FieldsEvent) -> Unit
@@ -249,6 +204,104 @@ fun FieldCard(
     }
 }
 
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun FieldCard(
+    state: FieldState,
+    index: Int,
+    onEvent: (FieldsEvent) -> Unit
+){
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    Card(
+        modifier = Modifier
+            .size(width = screenWidth - 24.dp, height = 100.dp),
+        onClick = { /*TODO*/ },
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            Image(
+                painter = painterResource(id = getCardImage(state.fields[index].sport)),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(width = 100.dp, height = 100.dp)
+                    .clip(shape = RoundedCornerShape(8.dp))
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp)
+                ) {
+                    Text(
+                        text = state.fields[index].title,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(
+                        onClick = {
+                            onEvent(FieldsEvent.DeleteField(state.fields[index]))
+                        },
+                        modifier = Modifier.size(21.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Delete Note",
+                            modifier = Modifier.size(53.dp),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+                Divider(
+                    color = Color.Black,
+                    thickness = 0.5.dp,
+                )
+                Row {
+                    Column {
+                        Row (modifier = Modifier.padding(top = 11.dp)){
+                            Column(
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(imageVector = getCardSportIcon(state.fields[index].sport), contentDescription = "Sport icon", modifier = Modifier.size(15.dp))
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = state.fields[index].sport,
+                                    )
+                                }
+                                Row (verticalAlignment = Alignment.CenterVertically){
+                                    Icon(imageVector = ImageVector.vectorResource(R.drawable.baseline_location_pin_24), contentDescription = "Location icon", modifier = Modifier.size(15.dp), tint = Color.Red)
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = state.fields[index].city,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Bottom,
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text(
+                            text = state.fields[index].price + " KM / " + state.fields[index].time +" min",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun CardPreview(){
@@ -282,3 +335,4 @@ fun getCardSportIcon(sport: String): ImageVector {
         ).build()
     }
 }
+
